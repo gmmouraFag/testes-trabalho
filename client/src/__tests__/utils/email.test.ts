@@ -1,72 +1,169 @@
 import { isEmailValid, getEmailValidationMessage } from '@/utils/email';
 
-describe('Email Validation Utils', () => {
+describe('Validação de Email - Utilitários', () => {
   describe('isEmailValid', () => {
-    it('✓ should validate correct email', () => {
-      expect(isEmailValid('user@example.com')).toBe(true);
+    it('✓ deve validar email correto', () => {
+      console.log('Iniciando teste: validação de email correto');
+      try {
+        expect(isEmailValid('user@example.com')).toBe(true);
+        console.log('✓ SUCESSO: Email correto validado');
+      } catch (error) {
+        console.error('✗ ERRO: Falha na validação de email correto', error);
+        throw error;
+      }
     });
 
-    it('✓ should validate email with multiple domains', () => {
-      expect(isEmailValid('user@mail.co.uk')).toBe(true);
+    it('✓ deve validar email com múltiplos domínios', () => {
+      console.log('Iniciando teste: validação de email com múltiplos domínios');
+      try {
+        expect(isEmailValid('user@mail.co.uk')).toBe(true);
+        console.log('✓ SUCESSO: Email com múltiplos domínios validado');
+      } catch (error) {
+        console.error('✗ ERRO: Falha na validação de email com múltiplos domínios', error);
+        throw error;
+      }
     });
 
-    it('✓ should validate email with numbers', () => {
-      expect(isEmailValid('user123@example.com')).toBe(true);
+    it('✓ deve validar email com números', () => {
+      console.log('Iniciando teste: validação de email com números');
+      try {
+        expect(isEmailValid('user123@example.com')).toBe(true);
+        console.log('✓ SUCESSO: Email com números validado');
+      } catch (error) {
+        console.error('✗ ERRO: Falha na validação de email com números', error);
+        throw error;
+      }
     });
 
-    it('✗ should reject email without @ symbol', () => {
-      expect(isEmailValid('userexample.com')).toBe(false);
+    it('✗ deve rejeitar email sem símbolo @', () => {
+      console.log('Iniciando teste: rejeição de email sem @');
+      try {
+        expect(isEmailValid('userexample.com')).toBe(false);
+        console.log('✓ SUCESSO: Email sem @ foi rejeitado');
+      } catch (error) {
+        console.error('✗ ERRO: Email sem @ não foi rejeitado corretamente', error);
+        throw error;
+      }
     });
 
-    it('✗ should reject email without domain extension', () => {
-      expect(isEmailValid('user@example')).toBe(false);
+    it('✗ deve rejeitar email sem extensão de domínio', () => {
+      console.log('Iniciando teste: rejeição de email sem extensão de domínio');
+      try {
+        expect(isEmailValid('user@example')).toBe(false);
+        console.log('✓ SUCESSO: Email sem extensão foi rejeitado');
+      } catch (error) {
+        console.error('✗ ERRO: Email sem extensão não foi rejeitado', error);
+        throw error;
+      }
     });
 
-    it('✗ BUG: should reject email with only @ (no domain)', () => {
-      const result = isEmailValid('user@');
-      // Frontend regex should catch this - backend doesn't validate properly!
-      expect(result).toBe(false);
+    it('✗ BUG: deve rejeitar email apenas com @ (sem domínio)', () => {
+      console.log('Iniciando teste: verificação de BUG - email apenas com @');
+      try {
+        const result = isEmailValid('user@');
+        // Frontend regex deveria capturar isso - backend não valida corretamente!
+        expect(result).toBe(false);
+        console.log('✓ SUCESSO: Email apenas com @ foi rejeitado (frontend correto)');
+      } catch (error) {
+        console.error('✗ ERRO: Problema na validação de email apenas com @', error);
+        throw error;
+      }
     });
 
-    it('✗ should reject null email', () => {
-      expect(isEmailValid('')).toBe(false);
+    it('✗ deve rejeitar email nulo', () => {
+      console.log('Iniciando teste: rejeição de email vazio');
+      try {
+        expect(isEmailValid('')).toBe(false);
+        console.log('✓ SUCESSO: Email vazio foi rejeitado');
+      } catch (error) {
+        console.error('✗ ERRO: Email vazio não foi rejeitado', error);
+        throw error;
+      }
     });
 
-    it('✗ should reject email with spaces', () => {
-      expect(isEmailValid('user @example.com')).toBe(false);
+    it('✗ deve rejeitar email com espaços', () => {
+      console.log('Iniciando teste: rejeição de email com espaços');
+      try {
+        expect(isEmailValid('user @example.com')).toBe(false);
+        console.log('✓ SUCESSO: Email com espaços foi rejeitado');
+      } catch (error) {
+        console.error('✗ ERRO: Email com espaços não foi rejeitado', error);
+        throw error;
+      }
     });
 
-    it('✗ should reject email with spaces in domain', () => {
-      expect(isEmailValid('user@exam ple.com')).toBe(false);
+    it('✗ deve rejeitar email com espaços no domínio', () => {
+      console.log('Iniciando teste: rejeição de email com espaços no domínio');
+      try {
+        expect(isEmailValid('user@exam ple.com')).toBe(false);
+        console.log('✓ SUCESSO: Email com espaços no domínio foi rejeitado');
+      } catch (error) {
+        console.error('✗ ERRO: Email com espaços no domínio não foi rejeitado', error);
+        throw error;
+      }
     });
 
-    it('✗ BUG: Email validation inconsistency with backend', () => {
-      // Frontend validates properly, but backend uses weak validation
-      // Backend only checks for "@" symbol
-      const emailWithoutDomain = 'user@';
-      const result = isEmailValid(emailWithoutDomain);
-      expect(result).toBe(false); // Frontend correct
-      // Backend would accept this due to containing "@"
+    it('✗ BUG: Inconsistência na validação de email com backend', () => {
+      console.log('Iniciando teste: verificação de inconsistência frontend/backend');
+      try {
+        // Frontend valida corretamente, mas backend usa validação fraca
+        // Backend apenas verifica símbolo "@"
+        const emailWithoutDomain = 'user@';
+        const result = isEmailValid(emailWithoutDomain);
+        expect(result).toBe(false); // Frontend correto
+        console.log('✓ SUCESSO: Frontend validou corretamente (backend aceitaria incorretamente)');
+      } catch (error) {
+        console.error('✗ ERRO: Problema na verificação de inconsistência', error);
+        throw error;
+      }
     });
   });
 
   describe('getEmailValidationMessage', () => {
-    it('✓ should return empty string for valid email', () => {
-      expect(getEmailValidationMessage('user@example.com')).toBe('');
+    it('✓ deve retornar string vazia para email válido', () => {
+      console.log('Iniciando teste: mensagem para email válido');
+      try {
+        expect(getEmailValidationMessage('user@example.com')).toBe('');
+        console.log('✓ SUCESSO: String vazia retornada para email válido');
+      } catch (error) {
+        console.error('✗ ERRO: Mensagem incorreta para email válido', error);
+        throw error;
+      }
     });
 
-    it('✓ should return required message for empty email', () => {
-      const message = getEmailValidationMessage('');
-      expect(message).toContain('obrigatório');
+    it('✓ deve retornar mensagem de obrigatoriedade para email vazio', () => {
+      console.log('Iniciando teste: mensagem para email vazio');
+      try {
+        const message = getEmailValidationMessage('');
+        expect(message).toContain('obrigatório');
+        console.log('✓ SUCESSO: Mensagem de obrigatoriedade retornada');
+      } catch (error) {
+        console.error('✗ ERRO: Mensagem incorreta para email vazio', error);
+        throw error;
+      }
     });
 
-    it('✓ should return invalid message for invalid email', () => {
-      const message = getEmailValidationMessage('invalid-email');
-      expect(message).toContain('inválido');
+    it('✓ deve retornar mensagem de invalidade para email inválido', () => {
+      console.log('Iniciando teste: mensagem para email inválido');
+      try {
+        const message = getEmailValidationMessage('invalid-email');
+        expect(message).toContain('inválido');
+        console.log('✓ SUCESSO: Mensagem de invalidade retornada');
+      } catch (error) {
+        console.error('✗ ERRO: Mensagem incorreta para email inválido', error);
+        throw error;
+      }
     });
 
-    it('✓ should handle trimmed spaces', () => {
-      expect(isEmailValid('  user@example.com  ')).toBe(true);
+    it('✓ deve lidar com espaços removíveis', () => {
+      console.log('Iniciando teste: remoção de espaços em email');
+      try {
+        expect(isEmailValid('  user@example.com  ')).toBe(true);
+        console.log('✓ SUCESSO: Espaços removidos corretamente');
+      } catch (error) {
+        console.error('✗ ERRO: Problema ao remover espaços', error);
+        throw error;
+      }
     });
   });
 });
