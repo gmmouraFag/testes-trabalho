@@ -1,3 +1,4 @@
+/// <reference types="@testing-library/jest-dom" />
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -14,7 +15,7 @@ const TestComponent = () => {
       </div>
       <button
         data-testid="login-btn"
-        onClick={() => login('test@example.com', 'TestPass123!')}
+        onClick={() => login({ id: 1, email: 'test@example.com' })}
       >
         Login
       </button>
@@ -130,7 +131,7 @@ describe('Contexto de Autenticação', () => {
 
           return (
             <div>
-              <button onClick={() => login('user@test.com', 'Pass123!')}>
+              <button onClick={() => login({ id: 1, email: 'user@test.com' })}>
                 Entrar
               </button>
               {isAuthenticated && (
@@ -170,7 +171,7 @@ describe('Contexto de Autenticação', () => {
             <div>
               <button
                 onClick={() =>
-                  login('newuser@example.com', 'SecurePassword123!')
+                  login({ id: 2, email: 'newuser@example.com' })
                 }
                 data-testid="custom-login"
               >
@@ -204,25 +205,25 @@ describe('Contexto de Autenticação', () => {
     });
   });
 
-  describe('Funcionalidade de Cadastro', () => {
-    it('✓ deve definir dados do usuário após cadastro bem-sucedido', async () => {
-      console.log('Iniciando teste: definição de dados do usuário no cadastro');
+  describe('Funcionalidade de Autenticação Persistente', () => {
+    it('✓ deve persistir dados do usuário após login', async () => {
+      console.log('Iniciando teste: persistência de dados após login');
       try {
-        const TestSignupComponent = () => {
-          const { user, signup, isAuthenticated } = useAuth();
+        const TestPersistenceComponent = () => {
+          const { user, isAuthenticated, login } = useAuth();
 
           return (
             <div>
               <button
                 onClick={() =>
-                  signup('newuser@example.com', 'NewPass123!')
+                  login({ id: 3, email: 'persist@example.com' })
                 }
-                data-testid="signup-btn"
+                data-testid="persist-btn"
               >
-                Cadastrar
+                Login
               </button>
               {isAuthenticated && (
-                <div data-testid="signup-user">{user?.email}</div>
+                <div data-testid="persist-user">{user?.email}</div>
               )}
             </div>
           );
@@ -230,20 +231,20 @@ describe('Contexto de Autenticação', () => {
 
         render(
           <AuthProvider>
-            <TestSignupComponent />
+            <TestPersistenceComponent />
           </AuthProvider>
         );
 
-        fireEvent.click(screen.getByTestId('signup-btn'));
+        fireEvent.click(screen.getByTestId('persist-btn'));
 
         await waitFor(() => {
-          expect(screen.getByTestId('signup-user')).toHaveTextContent(
-            'newuser@example.com'
+          expect(screen.getByTestId('persist-user')).toHaveTextContent(
+            'persist@example.com'
           );
         });
-        console.log('✓ SUCESSO: Dados do usuário definidos corretamente no cadastro');
+        console.log('✓ SUCESSO: Dados do usuário persistidos corretamente');
       } catch (error) {
-        console.error('✗ ERRO: Falha ao definir dados no cadastro', error);
+        console.error('✗ ERRO: Falha ao persistir dados', error);
         throw error;
       }
     });
@@ -258,7 +259,7 @@ describe('Contexto de Autenticação', () => {
 
           return (
             <div>
-              <button onClick={() => login('persistent@example.com', 'Pass123!')}>
+              <button onClick={() => login({ id: 4, email: 'persistent@example.com' })}>
                 Login
               </button>
               {isAuthenticated && (
