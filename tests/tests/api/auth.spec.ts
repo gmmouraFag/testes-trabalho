@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const API = 'http://localhost:8080/api';
+const API = 'http://localhost:8080';
 
 const TEST_USER_EMAIL = 'test@example.com';
 const TEST_USER_PASSWORD = 'Password123!';
