@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const API = 'http://localhost:8080/api';
+const API = 'http://localhost:8080';
 
 
 test('API 1: POST /auth/signin com credenciais válidas', async ({ request }) => {
